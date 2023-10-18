@@ -9,20 +9,23 @@ GPIO.setmode(GPIO.BOARD)  #Set the GPIO mode to use the physical pin numbering
 
 GPIO.setup(19, GPIO.OUT)  #Configure GPIO pin 19 as output pin
 
+app = QApplication([])  # Create the PyQt application
+win = QMainWindow()  # Create the main window
+
 #Function to emit a short Morse code signal (dot)
 def dot():
   GPIO.output(19,GPIO.HIGH)  #Turn on LED
-  time.sleep(300)  #Keep LED on for 300ms
+  time.sleep(0.3)  #Keep LED on for 300ms
   GPIO.output(19,GPIO.LOW)  #Turn off LED
-  time.sleep(900)  #Delay after LED is off for 900ms
+  time.sleep(0.3)  #Delay after LED is off for 900ms
 
   
 #Function to emit a long Morse code signal (dash)
 def dash():
   GPIO.output(19, GPIO.HIGH)  #Turn on LED
-  time.sleep(900)  #Keep LED on for 900ms
+  time.sleep(0.9)  #Keep LED on for 900ms
   GPIO.output(19,GPIO.LOW)  #Turn off LED
-  time.sleep(900)  #Delay after LED is off for 900ms
+  time.sleep(0.3)  #Delay after LED is off for 900ms
 
 #Function to convert a character to its Morse code representation
 def create_morse(alpha):
@@ -145,32 +148,45 @@ def handle_upload():
 
 #Limit the input to a maximum of 12 characters
   if len(name) > 12:
-      name = name[:12]  
+      name = name[:12]
+      print("Entered name has more than 12 charactres. Hence, showing morse code till 12 characters.")
+      print(name)
+   
+     
 #Convert each character of the name to Morse code
   for char in name:
       create_morse(char) 
   win.textbox.clear()   #Clear the text input field
 
-app = QApplication([])  # Create the PyQt application
-win = QMainWindow()  # Create the main window
+
 #Set the title, position and size of the main window
 win.setWindowTitle("Blink Morse Code")  
 win.resize(500,200)
 win.move(400,200)
 
+#Create a label to show your name and ID on the GUI
+label2=QLabel(win)
+label3=QLabel(win)
+label3.setText("Tanya having ID")
+label3.move(120,0)
+label2.setText("2210994850")
+label2.move(220,0)
+
 #Create a label to instruct the user to enter their name
 label1=QLabel(win)
 label1.setText("Enter Your Name")
+label1.move(20,30)
 
 # Create a text input field and adjust its position and size
 win.textbox = QLineEdit(win)
-win.textbox.move(40, 40)
+win.textbox.move(40, 60)
 win.textbox.resize(250,50)
 
 # Create an "Upload" button and connect it to the handle_upload function
 buttonUpload = QPushButton("Upload", win)
-buttonUpload.move(80,100)
+buttonUpload.move(80,120)
 buttonUpload.clicked.connect(handle_upload)
+
 
 win.show()  #Show the main window
 
